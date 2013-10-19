@@ -18,24 +18,25 @@ GTEST_LPATH = gtest-1.7.0/lib/.libs
 GTEST_LIBS = ${GTEST_LPATH}/libgtest_main.a ${GTEST_LPATH}/libgtest.a
 PTHREAD_LIBS = -lpthread
 
-all: gtestDemo
-	./gtestDemo
+EXECUTABLES = gtest_demo
+
+all: ${EXECUTABLES}
 
 # misc
 clean:
-	rm -fv *.o *.a
+	rm -fv *.o *.a *.so *.dylib ${EXECUTABLES}
 
-gtestTestDemo.o: gtestTestDemo.cpp
-	${CPP} ${CPPFLAGS} ${INCLUDE_GTEST} -c gtestTestDemo.cpp
+demoTest.o: demoTest.cpp
+	${CPP} ${CPPFLAGS} ${INCLUDE_GTEST} -c demoTest.cpp
 
-gtestFixtureDemo.o: gtestFixtureDemo.cpp
-	${CPP} ${CPPFLAGS} ${INCLUDE_GTEST} -c gtestFixtureDemo.cpp
+DemoFixture.o: DemoFixture.cpp
+	${CPP} ${CPPFLAGS} ${INCLUDE_GTEST} -c DemoFixture.cpp
 
 # googletest does not play nicely with libraries.
 # Listing each object file is the most reliable
 # way to construct a suite.
-TESTOBJECTS = gtestTestDemo.o gtestFixtureDemo.o
+TESTOBJECTS = demoTest.o DemoFixture.o
 
-gtestDemo: ${TESTOBJECTS}
-	${CPP} -o gtestDemo ${TESTOBJECTS} ${GTEST_LIBS} ${PTHREAD_LIBS}
+gtest_demo: ${TESTOBJECTS}
+	${CPP} -o gtest_demo ${TESTOBJECTS} ${GTEST_LIBS} ${PTHREAD_LIBS}
 
