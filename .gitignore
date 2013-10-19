@@ -46,5 +46,7 @@ parsetab.py
 *.pickle
 a.out
 
-gtest-*
 gtest_demo
+gtest-*
+gtest
+

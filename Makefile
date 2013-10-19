@@ -1,28 +1,36 @@
 EXECUTABLES = gtest_demo
 
-all: ${EXECUTABLES}
+all: gtest ${EXECUTABLES}
+	./gtest_demo
+
+# call uname to get the OS name (Darwin,Linux)
+UNAME = $(shell uname)
+
+ifeq (${UNAME},Darwin)
+# for C++11 (LLVM/clang-500.2.76) on Mac OS X
+CPP = g++ -std=c++11 -stdlib=libc++
+endif
+ifeq (${UNAME},Linux)
+# for C++11 (g++ 4.6.3) on Ubuntu 12.04 (64-bit)
+CPP = g++ -std=c++0x
+endif
 
 # compiler flags
 CPPFLAGS = -Wall -g3 -O0
 
-# for C++11 (LLVM/clang-500.2.76) on Mac OS X
-CPP = g++ -std=c++11 -stdlib=libc++
-
-# for C++11 (g++ 4.6.3) on Ubuntu 12.04 (64-bit)
-# CPP = /usr/bin/g++ -std=c++0x
-
-# gtest configured, built and tested as follows on OSX:
-#
-# 	./configure CXX=g++ CXXFLAGS="-std=c++11 -stdlib=libc++"
-# 	make
-# 	make check
-#
-GTEST_INCL  = -I gtest-1.7.0/include
-GTEST_LPATH = gtest-1.7.0/lib/.libs
+GTEST_DIR   = gtest-1.7.0
+GTEST_INCL  = -I ${GTEST_DIR}/include
+GTEST_LPATH = ${GTEST_DIR}/lib/.libs
 GTEST_LIBS  = ${GTEST_LPATH}/libgtest_main.a ${GTEST_LPATH}/libgtest.a
 
+LPTHREAD = -lpthread
+
 # misc
+gtest:
+	./build_gtest.sh ${GTEST_DIR}
+
 clean:
+	cd ${GTEST_DIR} && make clean && cd - && rm gtest
 	rm -fv *.o *.a *.so *.dylib ${EXECUTABLES}
 
 # individual test fixtures ("cases")
@@ -38,5 +46,5 @@ DemoFixture.o: DemoFixture.cpp
 TESTOBJECTS = demoTest.o DemoFixture.o
 
 gtest_demo: ${TESTOBJECTS}
-	${CPP} -o gtest_demo ${TESTOBJECTS} ${GTEST_LIBS} ${PTHREAD_LIBS}
+	${CPP} -o gtest_demo ${TESTOBJECTS} ${GTEST_LIBS} ${LPTHREAD}
 
