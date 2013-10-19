@@ -1,3 +1,7 @@
+EXECUTABLES = gtest_demo
+
+all: ${EXECUTABLES}
+
 # compiler flags
 CPPFLAGS = -Wall -g3 -O0
 
@@ -13,27 +17,23 @@ CPP = g++ -std=c++11 -stdlib=libc++
 # 	make
 # 	make check
 #
-INCLUDE_GTEST = -I gtest-1.7.0/include
+GTEST_INCL  = -I gtest-1.7.0/include
 GTEST_LPATH = gtest-1.7.0/lib/.libs
-GTEST_LIBS = ${GTEST_LPATH}/libgtest_main.a ${GTEST_LPATH}/libgtest.a
-PTHREAD_LIBS = -lpthread
-
-EXECUTABLES = gtest_demo
-
-all: ${EXECUTABLES}
+GTEST_LIBS  = ${GTEST_LPATH}/libgtest_main.a ${GTEST_LPATH}/libgtest.a
 
 # misc
 clean:
 	rm -fv *.o *.a *.so *.dylib ${EXECUTABLES}
 
+# individual test fixtures ("cases")
 demoTest.o: demoTest.cpp
-	${CPP} ${CPPFLAGS} ${INCLUDE_GTEST} -c demoTest.cpp
+	${CPP} ${CPPFLAGS} ${GTEST_INCL} -c demoTest.cpp
 
 DemoFixture.o: DemoFixture.cpp
-	${CPP} ${CPPFLAGS} ${INCLUDE_GTEST} -c DemoFixture.cpp
+	${CPP} ${CPPFLAGS} ${GTEST_INCL} -c DemoFixture.cpp
 
 # googletest does not play nicely with libraries.
-# Listing each object file is the most reliable
+# Listing each object file is the least painful
 # way to construct a suite.
 TESTOBJECTS = demoTest.o DemoFixture.o
 

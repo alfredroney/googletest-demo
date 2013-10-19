@@ -1,4 +1,4 @@
-// gtestDemoFixture.cpp
+// DemoFixture.cpp
 // ABR 20131019
 #include "gtest/gtest.h"
 
@@ -18,7 +18,7 @@ protected:
     }
 
     virtual void SetUp() {
-        assert(0==d_useCount);
+        assert(0==d_useCount++);
         std::cout
         << std::endl
         << "######## BEGIN TEST ############## "

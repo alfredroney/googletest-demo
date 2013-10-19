@@ -1,22 +1,22 @@
-// gtestDemo.cpp
+// demoTest.cpp
 // ABR 20131019
 #include "gtest/gtest.h"
 
 namespace /* give a hoot */ {
 
-TEST(DemoTest,PassingAssert)
+TEST(demoTest,PassingAssert)
 {
     ASSERT_TRUE(true)
     << "This message should not be written to the console." << std::endl;
 }
 
-TEST(DemoTest,FailingAsert)
+TEST(demoTest,FailingAsert)
 {
     ASSERT_TRUE(not true)
     << "This message should be written to the console." << std::endl;
 }
 
-TEST(DemoTest,PassAndFailingExpect)
+TEST(demoTest,PassAndFailingExpect)
 {
     EXPECT_TRUE(true)
     << "This message should not be written to the console." << std::endl;
@@ -33,7 +33,7 @@ static void assertInFunction() {
     assert(not "going to finish this function");    
 }
 
-TEST(DemoTest,AssertInFunction)
+TEST(demoTest,AssertInFunction)
 {
     assertInFunction();
     ASSERT_TRUE(not "supposed to reach this line")
