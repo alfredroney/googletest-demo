@@ -28,10 +28,13 @@ clean:
 gtestDemo.o: gtestDemo.cpp
 	${CPP} ${CPPFLAGS} ${INCLUDE_GTEST} -c gtestDemo.cpp
 
+gtestFixtureDemo.o: gtestFixtureDemo.cpp
+	${CPP} ${CPPFLAGS} ${INCLUDE_GTEST} -c gtestFixtureDemo.cpp
+
 # googletest does not play nicely with libraries.
 # Listing each object file is the most reliable
 # way to construct a suite.
-TESTOBJECTS = gtestDemo.o
+TESTOBJECTS = gtestDemo.o gtestFixtureDemo.o
 
 gtestDemo: ${TESTOBJECTS}
 	${CPP} -o gtestDemo ${TESTOBJECTS} ${GTEST_LIBS} ${PTHREAD_LIBS}
