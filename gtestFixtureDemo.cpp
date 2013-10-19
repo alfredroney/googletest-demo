@@ -1,13 +1,17 @@
+// gtestDemoFixture.cpp
+// ABR 20131019
 #include "gtest/gtest.h"
 
-class FixtureDemo
+namespace /* give a hoot */ {
+
+class DemoFixture
 : public ::testing::Test
 {
 protected:
 
     int d_useCount;
 
-    FixtureDemo()
+    DemoFixture()
     : d_useCount { 0 }
     {
         // could do some setup here, but see assertion below
@@ -17,15 +21,14 @@ protected:
         assert(0==d_useCount);
         std::cout
         << std::endl
-        << "Pre-test setup goes here "
-        << "(" << ++d_useCount << ")"
+        << "######## BEGIN TEST ############## "
         << std::endl;
     }
 
     virtual void TearDown() {
         std::cout
         << std::endl
-        << "Post-test cleanup goes here"
+        << "######## END TEST   ############## "
         << std::endl;
     }
 
@@ -33,37 +36,59 @@ protected:
         // Unfortunately, this technique does not work as expected.
         // The assertion registers a failing test and exits the
         // enclosing function's scope, but *does not* abort the calling case.
-        // If this were a null-pointer check on a return-by-reference, the test
-        // runner would probably crash.
+        // Could crash the test runner, preventing other tests from running.
         //
         // All ASSERT_*() macros from googletest must be called
-        // within the scope of the TEST_F(){} block.
+        // within the scope of the TEST_F(){} block if you want them
+        // to abort the test case on failure.
         ASSERT_FALSE(true)
         << std::endl
-        << "Don't assert in fixture member functions." << std::endl;
+        << "Don't assert in fixture member functions"
+        << std::endl;
 
-        assert(not "going to finish this function");
+        assert(not "going to finish executing this function");
     }
-};
+}; // class DemoFixture
 
-TEST_F(FixtureDemo,PassingAssert)
+TEST_F(DemoFixture,PassingAssert)
 {
-    ASSERT_TRUE(not false) << "Should pass" << std::endl;
+    ASSERT_TRUE(not false) << "Should pass, no console output" << std::endl;
 }
 
-TEST_F(FixtureDemo,FailingAssert)
+TEST_F(DemoFixture,FailingAssert)
 {
     ASSERT_FALSE(true)
-    << "This message should be written to console" << std::endl;
+    << "This message should be written to the console"
+    << std::endl;
 }
 
-TEST_F(FixtureDemo,AssertInFixtureMember)
+TEST_F(DemoFixture,AssertInFixtureMember)
 {
     assertInFixtureMember();
     ASSERT_TRUE(not "supposed to reach this line")
     << std::endl
     << "The previous assertion failed to abort the test." << std::endl
     << "This could lead to difficult-to-diagnose errors." << std::endl;
+
     assert(not "supposed to reach this line, either");
 }
 
+static void assertInFunction() {
+    ASSERT_FALSE(true)
+    << std::endl << "Don't assert in functions, either." << std::endl;
+
+    assert(not "going to finish this function");    
+}
+
+TEST_F(DemoFixture,AssertInFunction)
+{
+    assertInFunction();
+    ASSERT_TRUE(not "supposed to reach this line")
+    << std::endl
+    << "The previous assertion failed to abort the test." << std::endl
+    << "This could lead to difficult-to-diagnose errors." << std::endl;
+
+    assert(not "supposed to reach this line, either");
+}
+
+} // don't pollute
