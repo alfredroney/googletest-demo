@@ -18,19 +18,22 @@ endif
 # compiler flags
 CPPFLAGS = -Wall -g3 -O0
 
+# how this example builds agains googletest
 GTEST_DIR   = gtest-1.7.0
 GTEST_INCL  = -I ${GTEST_DIR}/include
 GTEST_LPATH = ${GTEST_DIR}/lib/.libs
 GTEST_LIBS  = ${GTEST_LPATH}/libgtest_main.a ${GTEST_LPATH}/libgtest.a
 
+# needed on Linux, optional on Darwin
 LPTHREAD = -lpthread
 
-# misc
+# The architecture of the last build is written to a text file named 'gtest'.
+# This file serves as a sentinel to prevent multiple rebuilds.
 gtest:
 	./build_gtest.sh ${GTEST_DIR}
 
 clean:
-	cd ${GTEST_DIR} && make clean && cd - && rm gtest
+	cd ${GTEST_DIR} && make clean && cd - && rm -fv gtest
 	rm -fv *.o *.a *.so *.dylib ${EXECUTABLES}
 
 # individual test fixtures ("cases")
