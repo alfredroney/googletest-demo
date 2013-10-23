@@ -8,7 +8,7 @@ UNAME = $(shell uname)
 
 ifeq (${UNAME},Darwin)
 # for C++11 (LLVM/clang-500.2.76) on Mac OS X
-CPP = g++ -std=c++11 -stdlib=libc++
+CPP = c++ -std=c++11 -stdlib=libc++
 endif
 ifeq (${UNAME},Linux)
 # for C++11 (g++ 4.6.3) on Ubuntu 12.04 (64-bit)
